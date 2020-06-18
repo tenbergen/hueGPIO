@@ -14,10 +14,10 @@ echo "Installing required modules..."
 sudo pip3 install flask
 echo "   done."
 
-echo "Exporting FLASK application
+echo "Exporting FLASK application..."
 export FLASK_APP=hueGPIO.py
 
-echo "Setting up neocal service..."
+echo "Setting up hueGPIO service..."
 sudo cp hueGPIO.service /etc/systemd/system/hueGPIO.service
 sudo systemctl enable hueGPIO.service
 echo "   done."
