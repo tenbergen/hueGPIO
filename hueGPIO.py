@@ -1,6 +1,6 @@
 import atexit, math, json, os.path
 from flask import Flask, request, jsonify
-from gpio_lights import neopixel
+from gpio_lights import light_emulator
 
 # FLASK INFRASTRUCTURE
 app = Flask(__name__)
@@ -13,18 +13,16 @@ def index():
     return "hueGPIO - a middleware to translate diyHUE JSON requests to generic Raspberry Pi GPIO commands."
 
 
-# When you kill Flask (SIGTERM), stop gpio_lights
-atexit.register(neopixel.interrupt)
-
-
 # HELPER METHODS
 # Converts brightness from 0..255 interval to 0..1 interval.
 def convertbrightness(requestedbrightness):
     return round((1.0 / 255 * requestedbrightness), 4)
 
-
+# Converts the color temperature from 153..370 mireds to 1000..40000 K for RGB conversion.
+# Milights' color temperature is measured in mireds (https://sidoh.github.io/esp8266_milight_hub/branches/latest/#tag/Device-Control/paths/~1gateways~1{device-id}~1{remote-type}~1{group-id}/put)
+# but diyHUE sends values all the way to to 463. This will undoubtedly cause cause the color temperature to be inaccurate.
 def converttemperature(requestedtemperature):
-    return ((requestedtemperature - 250) / (460 - 250)) * (40000 - 1000) + 1000
+    return ((requestedtemperature - 153) / (460 - 153)) * (40000 - 1000) + 1000
 
 # Converts color temperature to RGB.
 # from: https://gist.github.com/petrklus/b1f427accdf7438606a6
@@ -89,6 +87,7 @@ def convert_K_to_RGB(colour_temperature):
 
 
 # CUSTOM LIGHT INFRASTRUCTURE
+# required to make light states persistent and give feedback to Hue app.
 class LightState:
     def __init__(self, name):
         self.state = False
@@ -154,7 +153,6 @@ class LightState:
 
 # Parses the JSON request sent by diyHUE.
 def parserequest(requestjson, currentstate):
-    print(requestjson)
     parsedstate = currentstate
 
     if 'status' in requestjson:
@@ -177,12 +175,14 @@ def parserequest(requestjson, currentstate):
 
 
 # METHODS FOR CUSTOM LIGHTS
+# COPY THE METHOD AND CHANGE 0x0001 to something else for each additional light.
+#SNIP
 @app.route('/gateways/0x0001/rgb/1', methods=['PUT', 'GET'])
 def light_0x0001():
     name = "0x0001"
 
     if not request.is_json:
-        return "Please add this light to your hue emulator."
+        return 'Please add this light to diyHUE: <a href="https://diyhue.readthedocs.io/en/latest/lights/milight.html">https://diyhue.readthedocs.io/en/latest/lights/milight.html</a>'
 
     lightstate = LightState(name)
     filename = str(name) + '.json'
@@ -190,8 +190,10 @@ def light_0x0001():
         lightstate.load(filename)
 
     changedstate = parserequest(request.get_json(), lightstate)
-    neopixel.setHueColor((changedstate.red, changedstate.green, changedstate.blue), changedstate.brightness)
     changedstate.name = name
     changedstate.save(filename)
 
+    light_emulator.setHueColor((changedstate.red, changedstate.green, changedstate.blue), changedstate.brightness)
+
     return jsonify(changedstate.serialize())
+# SNAP
