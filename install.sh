@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $EUID > 0 ]
+if [ $EUID -gt 0 ]
    then echo "Please run with sudo. Exiting."
    exit
 fi
@@ -13,9 +13,6 @@ echo "   done."
 echo "Installing required modules..."
 sudo pip3 install flask
 echo "   done."
-
-echo "Exporting FLASK application..."
-export FLASK_APP=hueGPIO.py
 
 echo "Setting up hueGPIO service..."
 sudo cp hueGPIO.service /etc/systemd/system/hueGPIO.service

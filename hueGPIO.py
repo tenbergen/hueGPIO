@@ -157,6 +157,11 @@ def parserequest(requestjson, currentstate):
 
     if 'status' in requestjson:
         parsedstate.status = requestjson['status']
+        parsedstate.state = parsedstate.state
+        if parsedstate.status:
+            parsedstate.brightness = 1.0
+        else:
+            parsedstate.brightness = 0.0
     if 'fill' in requestjson:
         print("Unknown command: fill.", requestjson['fill'])
     if 'brightness' in requestjson:
