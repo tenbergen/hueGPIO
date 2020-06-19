@@ -19,6 +19,10 @@ sudo cp hueGPIO.service /etc/systemd/system/hueGPIO.service
 sudo systemctl enable hueGPIO.service
 echo "   done."
 
+echo "Setting start permissions..."
+sudo chmod +x start.sh
+echo "   done."
+
 echo "Starting hueGPIO..."
 sudo systemctl start hueGPIO.service
 echo "   installation complete."
