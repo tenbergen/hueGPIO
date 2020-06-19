@@ -58,7 +58,7 @@ def light_0x0001():
         return 'Please add this light to diyHUE: <a href="https://diyhue.readthedocs.io/en/latest/lights/milight.html">https://diyhue.readthedocs.io/en/latest/lights/milight.html</a>'
 
     lightstate = LightState(name)
-    filename = str(name) + '.json'
+    filename = path + str(name) + '.json'
     if os.path.isfile(filename):
         lightstate.load(filename)
 
@@ -83,6 +83,7 @@ def light_0x1234():
 light_emulator.setHueColor(...)
 ```
 to the same that you have selected in line 3 of the file.
+- Repeat these steps for any additional light.
 
 ### Control the service
 After adding your own light, you may need to restart the service via command line. Run:
@@ -101,6 +102,7 @@ Share the love and improve this thing:
 - Flask internal development server is used, which is unsafe. Upgrade to production server.
 - Add support for other GPIO devices.
 - Add support for reading from GPIO devices.
+- LEDs don't turn off when hueGPIO is killed.
 
 ## See also
 neocal  - A perpetual calendar for Raspberry Pi using NeoPixel LED lights.<br>

@@ -5,9 +5,13 @@ Description= hueGPIO middleware
 [Service]
 User=root
 Type=simple
+PermissionsStartOnly=true
 ExecStart=/home/pi/hueGPIO/start.sh
+WorkingDirectory=/home/pi/hueGPIO/
+Environment="FLASK_APP=hueGPIO.py"
 StandardInput=tty-force
-Restart=always
+Restart=on-failure
+RuntimeDirectoryMode=755
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

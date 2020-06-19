@@ -9,4 +9,4 @@ echo "Exporting FLASK application..."
 export FLASK_APP=hueGPIO.py
 
 echo "Launching FLASK application..."
-/usr/bin/python3 -m flask run --host=0.0.0.0 --port=5000
+flask run --host=0.0.0.0 --port=5000 > /home/pi/hueGPIO/hueGPIO.log

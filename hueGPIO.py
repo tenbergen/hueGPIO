@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from gpio_lights import light_emulator
 
 # FLASK INFRASTRUCTURE
+path = '/home/pi/hueGPIO/'
 app = Flask(__name__)
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
@@ -190,7 +191,7 @@ def light_0x0001():
         return 'Please add this light to diyHUE: <a href="https://diyhue.readthedocs.io/en/latest/lights/milight.html">https://diyhue.readthedocs.io/en/latest/lights/milight.html</a>'
 
     lightstate = LightState(name)
-    filename = str(name) + '.json'
+    filename = path + str(name) + '.json'
     if os.path.isfile(filename):
         lightstate.load(filename)
 
