@@ -105,5 +105,5 @@ Share the love and improve this thing:
 - LEDs don't turn off when hueGPIO is killed.
 
 ## See also
-neocal  - A perpetual calendar for Raspberry Pi using NeoPixel LED lights.<br>
-neotemp - An adafruit NeoPixel stick thermostat for Raspberry Pi.
+[neocal](https://github.com/tenbergen/neocal)  - A perpetual calendar for Raspberry Pi using NeoPixel LED lights.<br>
+[neotemp](https://github.com/tenbergen/neotemp) - An adafruit NeoPixel stick thermostat for Raspberry Pi.
