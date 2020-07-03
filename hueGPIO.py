@@ -19,11 +19,11 @@ def index():
 def convertbrightness(requestedbrightness):
     return round((1.0 / 255 * requestedbrightness), 4)
 
-# Converts the color temperature from 153..370 mireds to 1000..40000 K for RGB conversion.
+# Converts the color temperature from 153..500 mireds to 1000..40000 K for RGB conversion (https://en.wikipedia.org/wiki/Mired).
 # Milights' color temperature is measured in mireds (https://sidoh.github.io/esp8266_milight_hub/branches/latest/#tag/Device-Control/paths/~1gateways~1{device-id}~1{remote-type}~1{group-id}/put)
 # but diyHUE sends values all the way to to 463. This will undoubtedly cause cause the color temperature to be inaccurate.
 def converttemperature(requestedtemperature):
-    return ((requestedtemperature - 153) / (460 - 153)) * (40000 - 1000) + 1000
+    return ((requestedtemperature - 153) / (500 - 153)) * (40000 - 1000) + 1000
 
 # Converts color temperature to RGB.
 # from: https://gist.github.com/petrklus/b1f427accdf7438606a6
@@ -199,7 +199,7 @@ def light_0x0001():
     changedstate.name = name
     changedstate.save(filename)
 
-    light_emulator.setHueColor((changedstate.red, changedstate.green, changedstate.blue), changedstate.brightness)
+    light_emulator.setHueColor((int(changedstate.red), int(changedstate.green), int(changedstate.blue)), float(changedstate.brightness))
 
     return jsonify(changedstate.serialize())
 # SNAP
