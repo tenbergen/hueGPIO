@@ -10,7 +10,7 @@ ExecStart=/home/pi/hueGPIO/start.sh
 WorkingDirectory=/home/pi/hueGPIO/
 Environment="FLASK_APP=hueGPIO.py"
 StandardInput=tty-force
-Restart=on-failure
+Restart=always
 RuntimeDirectoryMode=755
 
 [Install]
